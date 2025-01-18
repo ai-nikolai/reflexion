@@ -24,11 +24,14 @@ with open("./base_prompt.txt", 'r') as f:
 def llm(prompt, stop=["\n"]):
     try:
         cur_try = 0
-        while cur_try < 6:
-            response = openai.Completion.create(
-            #   model="text-davinci-002",
-              model="gpt-3.5-turbo-instruct",
-              prompt=prompt,
+        while cur_try < 1:
+            # response = openai.Completion.create(
+            response = openai.ChatCompletion.create( #this is used by chat
+            #   model="text-davinci-002", 
+            #   model="gpt-3.5-turbo-instruct", #this is used by normal
+              model="gpt-4o-mini", #this is used by chat
+            #   prompt=prompt, #this is used by normal
+              messages = [{"role": "user", "content": prompt}], #this is used by chat
               temperature=cur_try * 0.2,
               max_tokens=100,
               top_p=1,
@@ -36,14 +39,18 @@ def llm(prompt, stop=["\n"]):
               presence_penalty=0.0,
               stop=stop
             )
-            text = response["choices"][0]["text"]
+            # text = response["choices"][0]["text"]
+            text = response.choices[0].message.content
+
             # dumb way to do this
             if len(text.strip()) >= 5:
-                return response["choices"][0]["text"]
+                # return response["choices"][0]["text"]
+                return  response.choices[0].message.content
             cur_try += 1
         return ""
     except Exception as e:
-        print(prompt)
+        # print(prompt)
+        print(e)
         import sys
         sys.exit(1)
 
