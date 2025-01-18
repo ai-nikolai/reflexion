@@ -10,7 +10,8 @@ from typing import Any, Dict, List, Tuple
  
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
-WEBSHOP_URL = "http://3.83.245.205:3000"
+# WEBSHOP_URL = "http://3.83.245.205:3000"
+WEBSHOP_URL="http://192.168.1.226:3000"
 ACTION_TO_TEMPLATE = {
     'Description': 'description_page.html',
     'Features': 'features_page.html',
@@ -25,7 +26,8 @@ def llm(prompt, stop=["\n"]):
         cur_try = 0
         while cur_try < 6:
             response = openai.Completion.create(
-              model="text-davinci-002",
+            #   model="text-davinci-002",
+              model="gpt-3.5-turbo-instruct",
               prompt=prompt,
               temperature=cur_try * 0.2,
               max_tokens=100,
